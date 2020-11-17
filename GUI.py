@@ -35,12 +35,8 @@ class RungeKuttaGUI:
 
         self.r_var = IntVar()
         self.r_var.set(0)
-        self.r1 = Radiobutton(tk, text="Test Func", variable=self.r_var, value=0)
         self.r2 = Radiobutton(tk, text="Func 1", variable=self.r_var, value=1)
-        self.r3 = Radiobutton(tk, text="Func 2", variable=self.r_var, value=2)
-        self.r1.place(x=250, y=0)
-        self.r2.place(x=250, y=25)
-        self.r3.place(x=250, y=50)
+
 
         self.error_control = BooleanVar()
         self.error_control.set(0)
@@ -59,13 +55,13 @@ class RungeKuttaGUI:
         self.x0_entry.place(x=400, y=50)
         # self.x0_entry.pack()
 
-        self.y0_label = ttk.Label(self.window)
-        self.y0_label.configure(text="y0")
-        self.y0_label.place(x=400, y=75)
+        self.I0_label = ttk.Label(self.window)
+        self.I0_label.configure(text="I0")
+        self.I0_label.place(x=400, y=75)
 
-        self.y0_entry = ttk.Entry(self.window, width=20)
-        self.y0_entry.insert(END, 1)
-        self.y0_entry.place(x=400, y=100)
+        self.I0_entry = ttk.Entry(self.window, width=20)
+        self.I0_entry.insert(END, 1)
+        self.I0_entry.place(x=400, y=100)
 
         self.h_label = ttk.Label(self.window)
         self.h_label.configure(text="h")
@@ -107,30 +103,39 @@ class RungeKuttaGUI:
         self.right_limit_entry.insert(END, 0)
         self.right_limit_entry.place(x=50, y=200)
 
-        self.a_label = ttk.Label(self.window)
-        self.a_label.configure(text="a")
-        self.a_label.place(x=550, y=25)
+        self.L_label = ttk.Label(self.window)
+        self.L_label.configure(text="L")
+        self.L_label.place(x=550, y=25)
 
-        self.a_entry = ttk.Entry(self.window, width=20)
-        self.a_entry.insert(END, 1)
-        self.a_entry.place(x=550, y=50)
+        self.L_entry = ttk.Entry(self.window, width=20)
+        self.L_entry.insert(END, 1)
+        self.L_entry.place(x=550, y=50)
 
-        self.b_label = ttk.Label(self.window)
-        self.b_label.configure(text="b")
-        self.b_label.place(x=550, y=75)
+        self.R_label = ttk.Label(self.window)
+        self.R_label.configure(text="R")
+        self.R_label.place(x=550, y=75)
 
-        self.b_entry = ttk.Entry(self.window, width=20)
-        self.b_entry.insert(END, 1)
-        self.b_entry.place(x=550, y=100)
+        self.R_entry = ttk.Entry(self.window, width=20)
+        self.R_entry.insert(END, 1)
+        self.R_entry.place(x=550, y=100)
+
+        self.V_label = ttk.Label(self.window)
+        self.V_label.configure(text="V")
+        self.V_label.place(x=550, y=125)
+
+        self.V_entry = ttk.Entry(self.window, width=20)
+        self.V_entry.insert(END, 1)
+        self.V_entry.place(x=550, y=150)
 
     def on_click(self):
         x0 = int(self.x0_entry.get())
-        y0 = int(self.y0_entry.get())
+        I0 = int(self.I0_entry.get())
         x = float(self.x_entry.get())
         h = float(self.h_entry.get())
         e = float(self.error_entry.get())
-        a = float(self.a_entry.get())
-        b = float(self.b_entry.get())
+        L = float(self.L_entry.get())
+        R= float(self.R_entry.get())
+        V= float(self.V_entry.get())
         iter_num = int(self.iter_num_entry.get())
         right_limit = float(self.right_limit_entry.get())
 
@@ -138,23 +143,23 @@ class RungeKuttaGUI:
 
         if self.r_var.get() == 0:
             self.graph_axes.clear()
-            x_values, y_values = ln.test_precise_sln(x0, y0, h, x)
+            x_values, y_values = ln.test_precise_sln(x0, I0, h, x)
             self.draw(x_values, y_values)
             x_values, y_values = ln.func_num_sln(
-                x0, y0, x, h, iter_num, e, ln.func_test, error_control, True
+                x0, I0, x, h, iter_num, e, ln.func_test, error_control, True
             )
             self.draw(x_values, y_values, clear=True)
 
         elif self.r_var.get() == 1:
             x_values, y_values, _, _, _, _, _ = ln.func_num_sln(
-                x0, y0, x, h, iter_num, e, ln.func_1, error_control, True
+                x0, I0, x, h, iter_num, e, ln.func_1, error_control, True
             )
             self.draw(x_values, y_values, clear=True)
 
         elif self.r_var.get() == 2:
             self.graph_axes.clear()
             x_values, y1_values, _, _, _, _, y2_values = ln.num_sol_3_task(
-                a, b, iter_num, ln.f_1, ln.f_2, x0, y0, y0, x, h, e, error_control
+                L, R, V, iter_num, ln.f_1, ln.f_2, x0, I0, I0, x, h, e, error_control
             )
             self.draw(x_values, y1_values)
             self.draw(x_values, y2_values)
@@ -175,12 +180,13 @@ class RungeKuttaGUI:
 
     def table(self):
         x0 = int(self.x0_entry.get())
-        y0 = int(self.y0_entry.get())
+        I0 = int(self.I0_entry.get())
         x = float(self.x_entry.get())
         h = float(self.h_entry.get())
         e = float(self.error_entry.get())
-        a = float(self.a_entry.get())
-        b = float(self.b_entry.get())
+        L = float(self.L_entry.get())
+        R = float(self.R_entry.get())
+        V = float(self.V_entry.get())
         iter_num = int(self.iter_num_entry.get())
         right_limit = float(self.right_limit_entry.get())
         count = []
@@ -189,16 +195,16 @@ class RungeKuttaGUI:
 
         if self.r_var.get() == 0:
             x_values, y1_values, v2, errors, h, c1, c2 = ln.func_num_sln(
-                x0, y0, x, h, iter_num, e, ln.func_test, error_control, True
+                x0, I0, x, h, iter_num, e, ln.func_test, error_control, True
             )
 
         elif self.r_var.get() == 1:
             x_values, y1_values, v2, errors, h, c1, c2 = ln.func_num_sln(
-                x0, y0, x, h, iter_num, e, ln.func_1, error_control, True
+                x0, I0, x, h, iter_num, e, ln.func_1, error_control, True
             )
         elif self.r_var.get() == 2:
             x_values, y1_values, y2_values = ln.num_sol_3_task(
-                a, b, iter_num, ln.f_1, ln.f_2, x0, y0, y0, x, h, e, error_control
+                L, R, V,  iter_num, ln.f_1, ln.f_2, x0, I0, I0, x, h, e, error_control
             )
 
         diff = list(map(lambda x: x[0] - x[1], zip(y1_values, v2)))
