@@ -69,8 +69,10 @@ def num_sol_3_task(L, V, R, N_max, f_1, f_2, x_0, I_0, x_end, h, e, error_contro
         temp1_ds, temp2_ds = rk4_s(
             x_0 + h / 2, temp1_ds, temp2_ds, f_1, f_2, L, V, R, h / 2, v_max
         )
-        if temp_1 == v_max or temp_2 == v_max or temp1_ds == v_max or temp1_ds == v_max:
+
+        if v_max in [temp_1, temp_2, temp1_ds]:
             break
+
         s_nor = abs(((temp_1 - temp1_ds) ** 2 + (temp_2 - temp2_ds) ** 2) ** (1 / 2))
         if error_control and s_nor > e:
             h = h / 2
@@ -95,7 +97,7 @@ def num_sol_3_task(L, V, R, N_max, f_1, f_2, x_0, I_0, x_end, h, e, error_contro
         if error_control:
             if counter >= N_max:
                 break
-        counter = counter + 1
+        counter += 1
 
     return X, U1, U1_ds, error_arr, H, C1, C2
 

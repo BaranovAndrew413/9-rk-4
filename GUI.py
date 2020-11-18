@@ -172,7 +172,7 @@ class RungeKuttaGUI:
 
         error_control = self.error_control.get() == 1
 
-        x_values, y1_values, v2, errors, h, c1, c2, _ = ln.func_num_sln(
+        x_values, y1_values, v2, errors, H, c1, c2, _ = ln.func_num_sln(
             x0, I0, x, h, iter_num, e, ln.func_1, error_control, False, L, V, R
         )
 
@@ -187,9 +187,10 @@ class RungeKuttaGUI:
             [max(errors)] * len(errors),
             c1,
             c2,
+            H
         ]
 
-        headers = ["x", "v", "v2", "v-v2", "LE", "max LE", "c1", "c2"]
+        headers = ["x", "v", "v2", "v-v2", "LE", "max LE", "c1", "c2", "H"]
 
         values_and_headers = [[headers[i]] + x for i, x in enumerate(values)]
 
@@ -221,7 +222,7 @@ class Table:
 
         for i in range(total_rows):
             for j in range(total_columns):
-                self.e = Entry(frame, width=30, fg="black", font=("Arial", 12))
+                self.e = Entry(frame, width=20, fg="black", font=("Arial", 12))
 
                 self.e.grid(row=j, column=i)
                 self.e.insert(END, lst[i][j])
