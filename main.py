@@ -8,7 +8,7 @@ import numpy as np
 #I_0 = float(input())
 
 
-def func_1(x, V, R, I, L):
+def func_1(x, I, R, V, L):
 
     return (V - R * I) / L
 

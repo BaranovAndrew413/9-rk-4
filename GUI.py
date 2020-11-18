@@ -60,7 +60,7 @@ class RungeKuttaGUI:
         self.I0_label.place(x=400, y=75)
 
         self.I0_entry = ttk.Entry(self.window, width=20)
-        self.I0_entry.insert(END, 1)
+        self.I0_entry.insert(END, 0)
         self.I0_entry.place(x=400, y=100)
 
         self.h_label = ttk.Label(self.window)
