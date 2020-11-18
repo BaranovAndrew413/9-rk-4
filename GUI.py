@@ -37,7 +37,6 @@ class RungeKuttaGUI:
         self.r_var.set(0)
         self.r2 = Radiobutton(tk, text="Func 1", variable=self.r_var, value=1)
 
-
         self.error_control = BooleanVar()
         self.error_control.set(0)
         self.error_checkbutton = Checkbutton(
@@ -134,24 +133,18 @@ class RungeKuttaGUI:
         h = float(self.h_entry.get())
         e = float(self.error_entry.get())
         L = float(self.L_entry.get())
-        R= float(self.R_entry.get())
-        V= float(self.V_entry.get())
+        R = float(self.R_entry.get())
+        V = float(self.V_entry.get())
         iter_num = int(self.iter_num_entry.get())
         right_limit = float(self.right_limit_entry.get())
 
         error_control = self.error_control.get() == 1
 
+        x_values, y_values, _, _, _, _, _, _ = ln.func_num_sln(
+            x0, I0, x, h, iter_num, e, ln.func_1, error_control, L, V, R, True
+        )
 
-
-
-        x_values, y_values, _,  _, _, _, _, _= ln.func_num_sln(
-                x0, I0, x, h, iter_num, e, ln.func_1, error_control, L, V, R, True
-             )
         self.draw(x_values, y_values, clear=True)
-
-
-
-    # self.draw(x_values, y_values, clear)
 
     def draw(self, x_values, y_values, clear=False):
         if clear:
@@ -176,22 +169,14 @@ class RungeKuttaGUI:
         V = float(self.V_entry.get())
         iter_num = int(self.iter_num_entry.get())
         right_limit = float(self.right_limit_entry.get())
-        count = []
 
         error_control = self.error_control.get() == 1
 
-
-
-
-        x_values, y1_values, v2, errors, h, c1, c2,_ = ln.func_num_sln(
-                x0, I0, x, h, iter_num, e, ln.func_1, error_control, L, V, R, True
-            )
-
+        x_values, y1_values, v2, errors, h, c1, c2, _ = ln.func_num_sln(
+            x0, I0, x, h, iter_num, e, ln.func_1, error_control, L, V, R, True
+        )
 
         diff = list(map(lambda x: x[0] - x[1], zip(y1_values, v2)))
-
-        if not count:
-            count = [""] * len(errors)
 
         values = [
             x_values,
@@ -202,12 +187,14 @@ class RungeKuttaGUI:
             [max(errors)] * len(errors),
             c1,
             c2,
-            [h] * len(errors),
-            count,
         ]
 
-        total_rows = len(values)
-        total_columns = len(values[0])
+        headers = ["x", "v", "v2", "v-v2", "LE", "max LE", "c1", "c2"]
+
+        values_and_headers = [[headers[i]] + x for i, x in enumerate(values)]
+
+        total_rows = len(values_and_headers)
+        total_columns = len(values_and_headers[0])
 
         self.table_root = Tk()
         self.canvas_table = Canvas(self.table_root, borderwidth=0, background="#ffffff")
@@ -222,7 +209,7 @@ class RungeKuttaGUI:
         self.frame.bind("<Configure>", self.on_frame_configure)
 
         self.table = Table(
-            self.table_root, self.frame, values, total_rows, total_columns
+            self.table_root, self.frame, values_and_headers, total_rows, total_columns
         )
 
     def on_frame_configure(self, event):
@@ -232,7 +219,6 @@ class RungeKuttaGUI:
 class Table:
     def __init__(self, root, frame, lst, total_rows, total_columns):
 
-        # code for creating table
         for i in range(total_rows):
             for j in range(total_columns):
                 self.e = Entry(frame, width=30, fg="black", font=("Arial", 12))

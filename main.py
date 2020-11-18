@@ -2,10 +2,10 @@ import math
 import matplotlib.pyplot as plt
 import numpy as np
 
-#L = float(input())
-#V = float(input())
-#R = float(input())
-#I_0 = float(input())
+# L = float(input())
+# V = float(input())
+# R = float(input())
+# I_0 = float(input())
 
 
 def func_1(x, I, R, V, L):
@@ -100,25 +100,27 @@ def num_sol_3_task(L, V, R, N_max, f_1, f_2, x_0, I_0, x_end, h, e, error_contro
     return X, U1, U1_ds, error_arr, H, C1, C2
 
 
-def rk4(x_i, y_i, h, func, v_max,L,V,R):
+def rk4(x_i, y_i, h, func, v_max, L, V, R):
     y = np.longdouble(y_i)
-    k1 = np.longdouble(h * func(x_i, y,L,V,R))
+    k1 = np.longdouble(h * func(x_i, y, L, V, R))
     if abs(k1) > v_max:
         return v_max
-    k2 = np.longdouble(h * func(x_i + h / 2, y + k1 / 2,L,V,R))
+    k2 = np.longdouble(h * func(x_i + h / 2, y + k1 / 2, L, V, R))
     if abs(k2) > v_max:
         return v_max
-    k3 = np.longdouble(h * func(x_i + h / 2, y + k2 / 2,L,V,R))
+    k3 = np.longdouble(h * func(x_i + h / 2, y + k2 / 2, L, V, R))
     if abs(k3) > v_max:
         return v_max
-    k4 = np.longdouble(h * func(x_i + h, y + k3,L,V,R))
+    k4 = np.longdouble(h * func(x_i + h, y + k3, L, V, R))
     if abs(k4) > v_max:
         return v_max
     y += np.longdouble((1 / 6) * (k1 + 2 * k2 + 2 * k3 + k4))
     return y
 
 
-def func_num_sln(x0, u0, x_max, h, Nmax, max_error, func, error_control, is_test, L, R,V):
+def func_num_sln(
+    x0, u0, x_max, h, Nmax, max_error, func, error_control, is_test, L, R, V
+):
     v_max = 10e30
     c1 = 0
     c2 = 0
@@ -143,7 +145,7 @@ def func_num_sln(x0, u0, x_max, h, Nmax, max_error, func, error_control, is_test
         temp = rk4(x, v, h, func, v_max, L, V, R)
         temp2 = rk4(x, v, h / 2, func, v_max, L, V, R)
         # v_half = temp2
-        temp2 = rk4(x + h / 2, temp2, h / 2, func, v_max, L, V ,R)
+        temp2 = rk4(x + h / 2, temp2, h / 2, func, v_max, L, V, R)
         if temp == v_max or temp2 == v_max:
             break
         if error_control and (abs(temp2 - temp) > max_error):
