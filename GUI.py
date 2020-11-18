@@ -141,28 +141,15 @@ class RungeKuttaGUI:
 
         error_control = self.error_control.get() == 1
 
-        if self.r_var.get() == 0:
-            self.graph_axes.clear()
-            x_values, y_values = ln.test_precise_sln(x0, I0, h, x)
-            self.draw(x_values, y_values)
-            x_values, y_values = ln.func_num_sln(
-                x0, I0, x, h, iter_num, e, ln.func_test, error_control, True
-            )
-            self.draw(x_values, y_values, clear=True)
 
-        elif self.r_var.get() == 1:
-            x_values, y_values, _, _, _, _, _ = ln.func_num_sln(
-                x0, I0, x, h, iter_num, e, ln.func_1, error_control, True
-            )
-            self.draw(x_values, y_values, clear=True)
 
-        elif self.r_var.get() == 2:
-            self.graph_axes.clear()
-            x_values, y1_values, _, _, _, _, y2_values = ln.num_sol_3_task(
-                L, R, V, iter_num, ln.f_1, ln.f_2, x0, I0, I0, x, h, e, error_control
-            )
-            self.draw(x_values, y1_values)
-            self.draw(x_values, y2_values)
+
+        x_values, y_values, _,  _, _, _, _, _= ln.func_num_sln(
+                x0, I0, x, h, iter_num, e, ln.func_1, error_control, L, V, R, True
+             )
+        self.draw(x_values, y_values, clear=True)
+
+
 
     # self.draw(x_values, y_values, clear)
 
@@ -193,19 +180,13 @@ class RungeKuttaGUI:
 
         error_control = self.error_control.get() == 1
 
-        if self.r_var.get() == 0:
-            x_values, y1_values, v2, errors, h, c1, c2 = ln.func_num_sln(
-                x0, I0, x, h, iter_num, e, ln.func_test, error_control, True
+
+
+
+        x_values, y1_values, v2, errors, h, c1, c2,_ = ln.func_num_sln(
+                x0, I0, x, h, iter_num, e, ln.func_1, error_control, L, V, R, True
             )
 
-        elif self.r_var.get() == 1:
-            x_values, y1_values, v2, errors, h, c1, c2 = ln.func_num_sln(
-                x0, I0, x, h, iter_num, e, ln.func_1, error_control, True
-            )
-        elif self.r_var.get() == 2:
-            x_values, y1_values, y2_values = ln.num_sol_3_task(
-                L, R, V,  iter_num, ln.f_1, ln.f_2, x0, I0, I0, x, h, e, error_control
-            )
 
         diff = list(map(lambda x: x[0] - x[1], zip(y1_values, v2)))
 
