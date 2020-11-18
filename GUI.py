@@ -141,7 +141,7 @@ class RungeKuttaGUI:
         error_control = self.error_control.get() == 1
 
         x_values, y_values, _, _, _, _, _, _ = ln.func_num_sln(
-            x0, I0, x, h, iter_num, e, ln.func_1, error_control, L, V, R, True
+            x0, I0, x, h, iter_num, e, ln.func_1, error_control, False, L, V, R
         )
 
         self.draw(x_values, y_values, clear=True)
@@ -173,7 +173,7 @@ class RungeKuttaGUI:
         error_control = self.error_control.get() == 1
 
         x_values, y1_values, v2, errors, h, c1, c2, _ = ln.func_num_sln(
-            x0, I0, x, h, iter_num, e, ln.func_1, error_control, L, V, R, True
+            x0, I0, x, h, iter_num, e, ln.func_1, error_control, False, L, V, R
         )
 
         diff = list(map(lambda x: x[0] - x[1], zip(y1_values, v2)))
