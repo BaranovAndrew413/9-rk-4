@@ -178,6 +178,15 @@ class RungeKuttaGUI:
         textline.pack()
         self.root.mainloop()
 
+    def output_values(self, max_error, max_h, min_h):
+        self.root = Tk()
+        text = 'Max error = ', max_error, '\n', 'Max h = ', max_h , '\n', 'Min h = ', min_h
+        # text = ''.join(text)
+        textline = Text(self.root)
+        textline.insert(1.0, text)
+        textline.pack()
+        self.root.mainloop()
+
     def table(self):
         x0 = int(self.x0_entry.get())
         I0 = int(self.I0_entry.get())
@@ -202,7 +211,6 @@ class RungeKuttaGUI:
             x_values,
             y1_values,
             v2,
-            diff,
             errors,
             [max(errors)] * len(errors),
             c1,
@@ -210,7 +218,9 @@ class RungeKuttaGUI:
             H
         ]
 
-        headers = ["x", "v", "v2", "v-v2", "локальная погрешность", "максимальная погрешность", "c1", "c2", "H"]
+
+
+        headers = ["x", "v", "v2", "локальная погрешность", "максимальная погрешность", "c1", "c2", "H"]
 
         values_and_headers = [[headers[i]] + x for i, x in enumerate(values)]
 
@@ -233,6 +243,7 @@ class RungeKuttaGUI:
             self.table_root, self.frame, values_and_headers, total_rows, total_columns
         )
 
+        self.output_values(max(errors), max(H), min(H))
     def on_frame_configure(self, event):
         self.canvas_table.configure(scrollregion=self.canvas_table.bbox("all"))
 
