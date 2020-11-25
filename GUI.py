@@ -5,14 +5,15 @@ matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 from tkinter import *
-
+from tkinter import messagebox as mb
 from tkinter import ttk
 import pylab
-
+from tkinter import filedialog as fd
 # import main as mn
 
 
 class RungeKuttaGUI:
+
     def __init__(self, window):
         self.window = window
         self.fig, self.graph_axes = pylab.subplots()
@@ -26,12 +27,17 @@ class RungeKuttaGUI:
 
     def mount_components(self):
         self.button = ttk.Button(master=self.window, command=self.on_click)
-        self.button.configure(text="Graph")
+        self.button.configure(text="График")
         self.button.place(x=50, y=0)
 
         self.button1 = ttk.Button(master=self.window, command=self.table)
-        self.button1.configure(text="Table")
+        self.button1.configure(text="Таблица")
         self.button1.place(x=150, y=0)
+
+        self.button2 = ttk.Button(master=self.window, command=self.insert_text)
+        self.button2.configure(text="Условие задачи 9")
+        self.button2.place(x=250, y=0)
+
 
         self.r_var = IntVar()
         self.r_var.set(0)
@@ -40,7 +46,7 @@ class RungeKuttaGUI:
         self.error_control = BooleanVar()
         self.error_control.set(0)
         self.error_checkbutton = Checkbutton(
-            tk, text="Error control", variable=self.error_control, onvalue=1, offvalue=0
+            tk, text="Контроль погрешности", variable=self.error_control, onvalue=1, offvalue=0
         )
         self.error_checkbutton.place(x=50, y=30)
 
@@ -79,7 +85,7 @@ class RungeKuttaGUI:
         self.x_entry.place(x=400, y=200)
 
         self.error_label = ttk.Label(self.window)
-        self.error_label.configure(text="error")
+        self.error_label.configure(text="погрешность")
         self.error_label.place(x=50, y=55)
 
         self.error_entry = ttk.Entry(self.window)
@@ -87,7 +93,7 @@ class RungeKuttaGUI:
         self.error_entry.place(x=50, y=80)
 
         self.iter_num_label = ttk.Label(self.window)
-        self.iter_num_label.configure(text="Iteration number")
+        self.iter_num_label.configure(text="кол-во итераций")
         self.iter_num_label.place(x=50, y=115)
 
         self.iter_num_entry = ttk.Entry(self.window)
@@ -95,7 +101,7 @@ class RungeKuttaGUI:
         self.iter_num_entry.place(x=50, y=140)
 
         self.right_limit_label = ttk.Label(self.window)
-        self.right_limit_label.configure(text="Right limit")
+        self.right_limit_label.configure(text="правая граница")
         self.right_limit_label.place(x=50, y=175)
 
         self.right_limit_entry = ttk.Entry(self.window)
@@ -125,6 +131,11 @@ class RungeKuttaGUI:
         self.V_entry = ttk.Entry(self.window, width=20)
         self.V_entry.insert(END, 1)
         self.V_entry.place(x=550, y=150)
+
+
+
+
+
 
     def on_click(self):
         x0 = int(self.x0_entry.get())
@@ -158,6 +169,15 @@ class RungeKuttaGUI:
         self.canvas.draw()
         self.canvas.get_tk_widget().place(x=0, y=250)
 
+    def insert_text(self):
+        self.root = Tk()
+        text = open('9.txt', ).readlines()
+        text = ''.join(text)
+        textline = Text(self.root)
+        textline.insert(1.0, text)
+        textline.pack()
+        self.root.mainloop()
+
     def table(self):
         x0 = int(self.x0_entry.get())
         I0 = int(self.I0_entry.get())
@@ -190,7 +210,7 @@ class RungeKuttaGUI:
             H
         ]
 
-        headers = ["x", "v", "v2", "v-v2", "LE", "max LE", "c1", "c2", "H"]
+        headers = ["x", "v", "v2", "v-v2", "локальная погрешность", "максимальная погрешность", "c1", "c2", "H"]
 
         values_and_headers = [[headers[i]] + x for i, x in enumerate(values)]
 
@@ -216,7 +236,6 @@ class RungeKuttaGUI:
     def on_frame_configure(self, event):
         self.canvas_table.configure(scrollregion=self.canvas_table.bbox("all"))
 
-
 class Table:
     def __init__(self, root, frame, lst, total_rows, total_columns):
 
@@ -226,7 +245,6 @@ class Table:
 
                 self.e.grid(row=j, column=i)
                 self.e.insert(END, lst[i][j])
-
 
 if __name__ == "__main__":
     tk = Tk()
