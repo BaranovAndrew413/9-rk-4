@@ -52,7 +52,7 @@ def num_sol_3_task(L, V, R, N_max, f_1, f_2, x_0, I_0, x_end, h, e, error_contro
     c2 = 0
     u1_ds = I_0
     s_nor = 0
-    counter = 1
+    n = 1
 
     C1 = [c1]
     C2 = [c2]
@@ -95,11 +95,11 @@ def num_sol_3_task(L, V, R, N_max, f_1, f_2, x_0, I_0, x_end, h, e, error_contro
             C2.append(c2)
             C1.append(c1)
         if error_control:
-            if counter >= N_max:
+            if n >= N_max:
                 break
-        counter += 1
+        n += 1
 
-    return X, U1, U1_ds, error_arr, H, C1, C2
+    return X, U1, U1_ds, error_arr, H, C1, C2, n-C1
 
 
 def rk4(x_i, y_i, h, func, v_max, L, V, R):
@@ -130,6 +130,7 @@ def func_num_sln(
     v = u0
     v2 = u0
     i = 1
+    n=0
 
     X = [x0]
     T = [u0]
@@ -166,22 +167,26 @@ def func_num_sln(
             C1.append(c1)
             H.append(h)
             error_arr.append(abs(v2 - v) / 15)
+            n+=1
             if is_test:
                 u = c * math.exp((-3 / 2) * x)
                 U.append(u)
+
             if error_control:
                 if abs(v2 - v) < (max_error / 32):
                     h *= 2
                     c2 += 1
             C2.append(c2)
+
         if error_control:
             if i == Nmax:
                 break
         i += 1
+        n += 1
         # if abs(v) > v_max:
         # break
 
-    return X, T, V2, error_arr, H, C1, C2, U
+    return X, T, V2, error_arr, H, C1, C2, U, n-c1
 
 
 def test_precise_sln(x0, u0, h, x_max):
