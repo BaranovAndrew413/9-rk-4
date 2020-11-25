@@ -201,7 +201,7 @@ class RungeKuttaGUI:
 
         error_control = self.error_control.get() == 1
 
-        x_values, y1_values, v2, errors, H, c1, c2, n, _ = ln.func_num_sln(
+        x_values, y1_values, v2, errors, H, c1, c2, _, n = ln.func_num_sln(
             x0, I0, x, h, iter_num, e, ln.func_1, error_control, False, L, V, R
         )
 
@@ -215,12 +215,12 @@ class RungeKuttaGUI:
             [max(errors)] * len(errors),
             c1,
             c2,
-            H
+            H,
+            [n] * len(errors)
         ]
 
 
-
-        headers = ["x", "v", "v2", "локальная погрешность", "максимальная погрешность", "c1", "c2", "H"]
+        headers = ["x", "v", "v2", "локальная погрешность", "максимальная погрешность", "c1", "c2", "H", "n"]
 
         values_and_headers = [[headers[i]] + x for i, x in enumerate(values)]
 
