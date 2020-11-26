@@ -21,8 +21,8 @@ class RungeKuttaGUI:
         self.graph_axes.grid()
 
     def run(self):
-        self.window.title("Runge Kutta")
-        self.window.geometry("700x700")
+        self.window.title("9-ый номер Баранов")
+        self.window.geometry("1000x1000")
         self.mount_components()
 
     def mount_components(self):
@@ -50,6 +50,10 @@ class RungeKuttaGUI:
         )
         self.error_checkbutton.place(x=50, y=30)
 
+        self.L_label = ttk.Label(self.window)
+        self.L_label.configure(text="Условия Задачи Коши")
+        self.L_label.place(x=400, y=5)
+
         self.x0_label = ttk.Label(self.window)
         self.x0_label.configure(text="x0")
         # self.x0_label.pack()
@@ -68,45 +72,53 @@ class RungeKuttaGUI:
         self.I0_entry.insert(END, 0)
         self.I0_entry.place(x=400, y=100)
 
+        self.L_label = ttk.Label(self.window)
+        self.L_label.configure(text="Параметры счёта")
+        self.L_label.place(x=705, y=5)
+
         self.h_label = ttk.Label(self.window)
-        self.h_label.configure(text="h")
-        self.h_label.place(x=400, y=125)
+        self.h_label.configure(text="Начальный шаг счета h")
+        self.h_label.place(x=705, y=175)
 
         self.h_entry = ttk.Entry(self.window)
         self.h_entry.insert(END, 0.1)
-        self.h_entry.place(x=400, y=150)
+        self.h_entry.place(x=705, y=200)
 
         self.x_label = ttk.Label(self.window)
         self.x_label.configure(text="x")
-        self.x_label.place(x=400, y=175)
+        self.x_label.place(x=705, y=225)
 
         self.x_entry = ttk.Entry(self.window)
         self.x_entry.insert(END, 1)
-        self.x_entry.place(x=400, y=200)
+        self.x_entry.place(x=705, y=250)
 
         self.error_label = ttk.Label(self.window)
-        self.error_label.configure(text="погрешность")
-        self.error_label.place(x=50, y=55)
+        self.error_label.configure(text="параметр контроля погрешности")
+        self.error_label.place(x=705, y=25)
 
         self.error_entry = ttk.Entry(self.window)
         self.error_entry.insert(END, 0)
-        self.error_entry.place(x=50, y=80)
+        self.error_entry.place(x=705, y=50)
 
         self.iter_num_label = ttk.Label(self.window)
-        self.iter_num_label.configure(text="кол-во итераций")
-        self.iter_num_label.place(x=50, y=115)
+        self.iter_num_label.configure(text="максимальное число шагов")
+        self.iter_num_label.place(x=705, y=75)
 
         self.iter_num_entry = ttk.Entry(self.window)
         self.iter_num_entry.insert(END, 0)
-        self.iter_num_entry.place(x=50, y=140)
+        self.iter_num_entry.place(x=705, y=100)
 
         self.right_limit_label = ttk.Label(self.window)
-        self.right_limit_label.configure(text="правая граница")
-        self.right_limit_label.place(x=50, y=175)
+        self.right_limit_label.configure(text="параметр контроля выхода на правую границу")
+        self.right_limit_label.place(x=705, y=125)
 
         self.right_limit_entry = ttk.Entry(self.window)
         self.right_limit_entry.insert(END, 0)
-        self.right_limit_entry.place(x=50, y=200)
+        self.right_limit_entry.place(x=705, y=150)
+
+        self.L_label = ttk.Label(self.window)
+        self.L_label.configure(text="Параметры задачи")
+        self.L_label.place(x=550, y=5)
 
         self.L_label = ttk.Label(self.window)
         self.L_label.configure(text="L")
@@ -133,10 +145,6 @@ class RungeKuttaGUI:
         self.V_entry.place(x=550, y=150)
 
 
-
-
-
-
     def on_click(self):
         x0 = int(self.x0_entry.get())
         I0 = int(self.I0_entry.get())
@@ -148,6 +156,7 @@ class RungeKuttaGUI:
         V = float(self.V_entry.get())
         iter_num = int(self.iter_num_entry.get())
         right_limit = float(self.right_limit_entry.get())
+
 
         error_control = self.error_control.get() == 1
 
@@ -180,12 +189,16 @@ class RungeKuttaGUI:
 
     def output_values(self, max_error, max_h, min_h, n):
         self.root = Tk()
-        text = 'Max ЛП = ', max_error, '\n', 'Max h = ', max_h , '\n', 'Min h = ', min_h, 'Количество точек=', n
+        text = 'Max ЛП = ', max_error, '\n', 'Max h = ', max_h , '\n', 'Min h = ', min_h, 'Количество точек=', n ,\
+                '\n' '(x,v)-точка численной траектории, вычисленная методом РК с текущем шагом ',\
+                '\n' '(x,v2)-точка численной траектории, вычисленная методом РК с половинным шагом ',\
+               '\n'  'ОЛП-оценка локальной погрешности' ,'H-текущий шаг, на котором взяли точку',\
+               '\n' 'с1-счетчик деления шага,с2 счетчик удвоений шага'
         # text = ''.join(text)
         textline = Text(self.root)
         textline.insert(1.0, text)
         textline.pack()
-        self.root.mainloop()
+
 
     def table(self):
         x0 = int(self.x0_entry.get())
@@ -204,25 +217,28 @@ class RungeKuttaGUI:
         x_values, y1_values, v2, errors, H, c1, c2, _, n = ln.func_num_sln(
             x0, I0, x, h, iter_num, e, ln.func_1, error_control, False, L, V, R
         )
+        n=len(x_values)
+        data = [i for i in range(0, n)]
+
 
         diff = list(map(lambda x: x[0] - x[1], zip(y1_values, v2)))
 
         values = [
+            data,
             x_values,
             y1_values,
             v2,
             errors,
-            [max(errors)] * len(errors),
             c1,
             c2,
-            H,
-            [n] * len(errors)
+            H
+
         ]
 
 
-        headers = ["x", "v", "v2", "локальная погрешность", "максимальная погрешность", "c1", "c2", "H", "n"]
+        headers = ["№","x", "v", "v2", "ОЛП", "c1", "c2", "H"]
 
-        values_and_headers = [[headers[i]] + x for i, x in enumerate(values)]
+        values_and_headers = [[headers[i]] + data for i, data in enumerate(values)]
 
         total_rows = len(values_and_headers)
         total_columns = len(values_and_headers[0])
@@ -238,7 +254,6 @@ class RungeKuttaGUI:
         self.canvas_table.pack(side="left", fill="both", expand=True)
         self.canvas_table.create_window((8, 8), window=self.frame, anchor="nw")
         self.frame.bind("<Configure>", self.on_frame_configure)
-
         self.table = Table(
             self.table_root, self.frame, values_and_headers, total_rows, total_columns
         )
