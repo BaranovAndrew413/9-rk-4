@@ -1,5 +1,6 @@
 import main as ln
 import matplotlib
+import matplotlib.pyplot as plt
 
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
@@ -16,9 +17,10 @@ class RungeKuttaGUI:
 
     def __init__(self, window):
         self.window = window
-        self.fig, self.graph_axes = pylab.subplots()
-        self.fig.subplots_adjust(left=0.07, right=0.95, top=0.95, bottom=0.2)
-        self.graph_axes.grid()
+        self.fig = plt.figure()
+        self.graph_axes = self.fig.add_subplot(111)
+
+        self.fig.subplots_adjust(left=0.10, right=0.95, top=0.95, bottom=0.2)
 
     def run(self):
         self.window.title("9-ый номер Баранов")
@@ -59,7 +61,7 @@ class RungeKuttaGUI:
         # self.x0_label.pack()
         self.x0_label.place(x=400, y=25)
 
-        self.x0_entry = ttk.Entry(self.window, width=20)
+        self.x0_entry = ttk.Entry(self.window, width=10)
         self.x0_entry.insert(END, 0)
         self.x0_entry.place(x=400, y=50)
         # self.x0_entry.pack()
@@ -68,7 +70,7 @@ class RungeKuttaGUI:
         self.I0_label.configure(text="I0")
         self.I0_label.place(x=400, y=75)
 
-        self.I0_entry = ttk.Entry(self.window, width=20)
+        self.I0_entry = ttk.Entry(self.window, width=10)
         self.I0_entry.insert(END, 0)
         self.I0_entry.place(x=400, y=100)
 
@@ -80,7 +82,7 @@ class RungeKuttaGUI:
         self.h_label.configure(text="Начальный шаг счета h")
         self.h_label.place(x=705, y=175)
 
-        self.h_entry = ttk.Entry(self.window)
+        self.h_entry = ttk.Entry(self.window, width=10)
         self.h_entry.insert(END, 0.1)
         self.h_entry.place(x=705, y=200)
 
@@ -88,7 +90,7 @@ class RungeKuttaGUI:
         self.x_label.configure(text="x")
         self.x_label.place(x=705, y=225)
 
-        self.x_entry = ttk.Entry(self.window)
+        self.x_entry = ttk.Entry(self.window, width=10)
         self.x_entry.insert(END, 1)
         self.x_entry.place(x=705, y=250)
 
@@ -96,7 +98,7 @@ class RungeKuttaGUI:
         self.error_label.configure(text="параметр контроля погрешности")
         self.error_label.place(x=705, y=25)
 
-        self.error_entry = ttk.Entry(self.window)
+        self.error_entry = ttk.Entry(self.window, width=10)
         self.error_entry.insert(END, 0)
         self.error_entry.place(x=705, y=50)
 
@@ -104,7 +106,7 @@ class RungeKuttaGUI:
         self.iter_num_label.configure(text="максимальное число шагов")
         self.iter_num_label.place(x=705, y=75)
 
-        self.iter_num_entry = ttk.Entry(self.window)
+        self.iter_num_entry = ttk.Entry(self.window, width=10)
         self.iter_num_entry.insert(END, 0)
         self.iter_num_entry.place(x=705, y=100)
 
@@ -112,37 +114,37 @@ class RungeKuttaGUI:
         self.right_limit_label.configure(text="параметр контроля выхода на правую границу")
         self.right_limit_label.place(x=705, y=125)
 
-        self.right_limit_entry = ttk.Entry(self.window)
+        self.right_limit_entry = ttk.Entry(self.window, width=10)
         self.right_limit_entry.insert(END, 0)
         self.right_limit_entry.place(x=705, y=150)
 
         self.L_label = ttk.Label(self.window)
         self.L_label.configure(text="Параметры задачи")
-        self.L_label.place(x=550, y=5)
+        self.L_label.place(x=560, y=5)
 
         self.L_label = ttk.Label(self.window)
         self.L_label.configure(text="L")
-        self.L_label.place(x=550, y=25)
+        self.L_label.place(x=560, y=25)
 
-        self.L_entry = ttk.Entry(self.window, width=20)
+        self.L_entry = ttk.Entry(self.window, width=10)
         self.L_entry.insert(END, 1)
-        self.L_entry.place(x=550, y=50)
+        self.L_entry.place(x=560, y=50)
 
         self.R_label = ttk.Label(self.window)
         self.R_label.configure(text="R")
-        self.R_label.place(x=550, y=75)
+        self.R_label.place(x=560, y=75)
 
-        self.R_entry = ttk.Entry(self.window, width=20)
+        self.R_entry = ttk.Entry(self.window, width=10)
         self.R_entry.insert(END, 1)
-        self.R_entry.place(x=550, y=100)
+        self.R_entry.place(x=560, y=100)
 
         self.V_label = ttk.Label(self.window)
         self.V_label.configure(text="V")
-        self.V_label.place(x=550, y=125)
+        self.V_label.place(x=560, y=125)
 
-        self.V_entry = ttk.Entry(self.window, width=20)
+        self.V_entry = ttk.Entry(self.window, width=10)
         self.V_entry.insert(END, 1)
-        self.V_entry.place(x=550, y=150)
+        self.V_entry.place(x=560, y=150)
 
 
     def on_click(self):
@@ -170,6 +172,8 @@ class RungeKuttaGUI:
         if clear:
             self.graph_axes.clear()
         self.graph_axes.plot(x_values, y_values)
+        self.graph_axes.set_xlabel('x')
+        self.graph_axes.set_ylabel('I(x)')
         try:
             self.canvas.get_tk_widget().pack_forget()
         except AttributeError:
@@ -189,12 +193,12 @@ class RungeKuttaGUI:
 
     def output_values(self, max_error, max_h, min_h, n):
         self.root = Tk()
-        text = 'Max ЛП = ', max_error, '\n', 'Max h = ', max_h , '\n', 'Min h = ', min_h, 'Количество точек=', n ,\
-                '\n' '(x,v)-точка численной траектории, вычисленная методом РК с текущем шагом ',\
-                '\n' '(x,v2)-точка численной траектории, вычисленная методом РК с половинным шагом ',\
-               '\n'  'ОЛП-оценка локальной погрешности' ,'H-текущий шаг, на котором взяли точку',\
-               '\n' 'с1-счетчик деления шага,с2 счетчик удвоений шага'
-        # text = ''.join(text)
+        text = f"Max ЛП = {max_error}, Max h = {max_h}, Min h = {min_h}, Количество точек = {n} \
+                \n (x,v)-точка численной траектории, вычисленная методом РК с текущем шагом \
+                \n (x,v2)-точка численной траектории, вычисленная методом РК с половинным шагом \
+                \n ОЛП-оценка локальной погрешности' ,'H-текущий шаг, на котором взяли точку \
+                \n с1-счетчик деления шага,с2 счетчик удвоений шага"
+
         textline = Text(self.root)
         textline.insert(1.0, text)
         textline.pack()
@@ -217,11 +221,8 @@ class RungeKuttaGUI:
         x_values, y1_values, v2, errors, H, c1, c2, _, n = ln.func_num_sln(
             x0, I0, x, h, iter_num, e, ln.func_1, error_control, False, L, V, R, right_limit
         )
-        n=len(x_values)
+        n = len(x_values)
         data = [i for i in range(0, n)]
-
-
-        diff = list(map(lambda x: x[0] - x[1], zip(y1_values, v2)))
 
         values = [
             data,
@@ -232,11 +233,9 @@ class RungeKuttaGUI:
             c1,
             c2,
             H
-
         ]
 
-
-        headers = ["№","x", "v", "v2", "ОЛП", "c1", "c2", "H"]
+        headers = ["№", "x", "v", "v2", "ОЛП", "c1", "c2", "H"]
 
         values_and_headers = [[headers[i]] + data for i, data in enumerate(values)]
 
@@ -259,6 +258,7 @@ class RungeKuttaGUI:
         )
 
         self.output_values(max(errors), max(H), min(H), n)
+
     def on_frame_configure(self, event):
         self.canvas_table.configure(scrollregion=self.canvas_table.bbox("all"))
 
