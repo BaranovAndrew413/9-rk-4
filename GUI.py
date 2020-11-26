@@ -8,7 +8,8 @@ from tkinter import *
 from tkinter import messagebox as mb
 from tkinter import ttk
 import pylab
-from PIL import ImageTk, Image
+from tkinter import filedialog as fd
+# import main as mn
 
 
 class RungeKuttaGUI:
@@ -178,12 +179,13 @@ class RungeKuttaGUI:
         self.canvas.get_tk_widget().place(x=0, y=250)
 
     def insert_text(self):
-        self.description_root = Tk()
-        self.description_canvas = Canvas(self.description_root, width=710, height=208)
-        self.img = ImageTk.PhotoImage(Image.open("5.jpg"), master=self.description_root)
-        self.description_canvas.create_image(20, 20, anchor=NW, image=self.img)
-        self.description_canvas.pack()
-        mainloop()
+        self.root = Tk()
+        text = open('9.txt', ).readlines()
+        text = ''.join(text)
+        textline = Text(self.root)
+        textline.insert(1.0, text)
+        textline.pack()
+        self.root.mainloop()
 
     def output_values(self, max_error, max_h, min_h, n):
         self.root = Tk()
