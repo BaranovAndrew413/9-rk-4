@@ -10,7 +10,7 @@ from tkinter import messagebox as mb
 from tkinter import ttk
 import pylab
 from tkinter import filedialog as fd
-# import main as mn
+from PIL import ImageTk, Image
 
 
 class RungeKuttaGUI:
@@ -183,16 +183,17 @@ class RungeKuttaGUI:
         self.canvas.get_tk_widget().place(x=0, y=250)
 
     def insert_text(self):
-        self.root = Tk()
-        text = open('9.txt', ).readlines()
-        text = ''.join(text)
-        textline = Text(self.root)
-        textline.insert(1.0, text)
-        textline.pack()
-        self.root.mainloop()
+        self.description_root = Tk()
+        self.description_root.title("Условия задачи")
+        self.description_canvas = Canvas(self.description_root, width=710, height=208)
+        self.img = ImageTk.PhotoImage(Image.open("5.jpg"), master=self.description_root)
+        self.description_canvas.create_image(20, 20, anchor=NW, image=self.img)
+        self.description_canvas.pack()
+        mainloop()
 
     def output_values(self, max_error, max_h, min_h, n):
         self.root = Tk()
+        self.root.title("Выходные значения")
         text = f"Max ЛП = {max_error}, Max h = {max_h}, Min h = {min_h}, Количество точек = {n} \
                 \n (x,v)-точка численной траектории, вычисленная методом РК с текущем шагом \
                 \n (x,v2)-точка численной траектории, вычисленная методом РК с половинным шагом \
@@ -243,6 +244,7 @@ class RungeKuttaGUI:
         total_columns = len(values_and_headers[0])
 
         self.table_root = Tk()
+        self.table_root.title("Таблица")
         self.canvas_table = Canvas(self.table_root, borderwidth=0, background="#ffffff")
         self.frame = Frame(self.canvas_table, background="#ffffff")
         self.scrollbar = Scrollbar(
