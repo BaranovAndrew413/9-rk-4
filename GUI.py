@@ -199,7 +199,7 @@ class RungeKuttaGUI:
                 \n ОЛП-оценка локальной погрешности' ,'H-текущий шаг, на котором взяли точку \
                 \n с1-счетчик деления шага,с2 счетчик удвоений шага"
 
-        textline = Text(self.root)
+        textline = Text(self.root, width=100)
         textline.insert(1.0, text)
         textline.pack()
 
