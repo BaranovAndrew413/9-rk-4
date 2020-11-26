@@ -161,7 +161,7 @@ class RungeKuttaGUI:
         error_control = self.error_control.get() == 1
 
         x_values, y_values, _, _, _, _, _, _, _ = ln.func_num_sln(
-            x0, I0, x, h, iter_num, e, ln.func_1, error_control, False, L, V, R
+            x0, I0, x, h, iter_num, e, ln.func_1, error_control, False, L, V, R, right_limit
         )
 
         self.draw(x_values, y_values, clear=True)
@@ -215,7 +215,7 @@ class RungeKuttaGUI:
         error_control = self.error_control.get() == 1
 
         x_values, y1_values, v2, errors, H, c1, c2, _, n = ln.func_num_sln(
-            x0, I0, x, h, iter_num, e, ln.func_1, error_control, False, L, V, R
+            x0, I0, x, h, iter_num, e, ln.func_1, error_control, False, L, V, R, right_limit
         )
         n=len(x_values)
         data = [i for i in range(0, n)]

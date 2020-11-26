@@ -121,7 +121,7 @@ def rk4(x_i, y_i, h, func, v_max, L, V, R):
 
 
 def func_num_sln(
-    x0, u0, x_max, h, Nmax, max_error, func, error_control, is_test, L, R, V
+    x0, u0, x_max, h, Nmax, max_error, func, error_control, is_test, L, R, V, right_limit
 ):
     v_max = 10e30
     c1 = 0
@@ -183,8 +183,13 @@ def func_num_sln(
                 break
         i += 1
         n += 1
-        # if abs(v) > v_max:
-        # break
+        if x + h > x_max:
+            while x + h > x_max:
+                h /= 2
+                c1 += 1
+        if x > x_max - right_limit:
+            break
+
 
     return X, T, V2, error_arr, H, C1, C2, U, n-c1
 
