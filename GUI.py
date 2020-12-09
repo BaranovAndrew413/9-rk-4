@@ -23,7 +23,7 @@ class RungeKuttaGUI:
         self.fig.subplots_adjust(left=0.10, right=0.95, top=0.95, bottom=0.2)
 
     def run(self):
-        self.window.title("9-ый номер Баранов")
+        self.window.title("9-й номер Баранов")
         self.window.geometry("1000x1000")
         self.mount_components()
 
@@ -172,8 +172,8 @@ class RungeKuttaGUI:
         if clear:
             self.graph_axes.clear()
         self.graph_axes.plot(x_values, y_values)
-        self.graph_axes.set_xlabel('x')
-        self.graph_axes.set_ylabel('I(x)')
+        self.graph_axes.set_xlabel('x-время')
+        self.graph_axes.set_ylabel('I(x)-сила тока')
         try:
             self.canvas.get_tk_widget().pack_forget()
         except AttributeError:
@@ -185,7 +185,7 @@ class RungeKuttaGUI:
     def insert_text(self):
         self.description_root = Tk()
         self.description_root.title("Условия задачи")
-        self.description_canvas = Canvas(self.description_root, width=710, height=208)
+        self.description_canvas = Canvas(self.description_root, width=710, height=218)
         self.img = ImageTk.PhotoImage(Image.open("5.jpg"), master=self.description_root)
         self.description_canvas.create_image(20, 20, anchor=NW, image=self.img)
         self.description_canvas.pack()

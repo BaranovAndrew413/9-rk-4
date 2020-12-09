@@ -73,8 +73,8 @@ def num_sol_3_task(L, V, R, N_max, f_1, f_2, x_0, I_0, x_end, h, e, error_contro
         if v_max in [temp_1, temp_2, temp1_ds]:
             break
 
-        s_nor = abs(((temp_1 - temp1_ds) ** 2 + (temp_2 - temp2_ds) ** 2) ** (1 / 2))
-        if error_control and s_nor > e:
+        s_nor = ((temp_1 - temp1_ds) /15)
+        if error_control and abs(s_nor) > e:
             h = h / 2
             c1 += 1
         else:
@@ -140,7 +140,7 @@ def func_num_sln(
     C1 = [c1]
     C2 = [c2]
     H = [h]
-    error_arr = [abs(v2 - v) / 15]
+    error_arr = [(v2 - v) / 15]
     if is_test:
         c = u0 * math.exp((5 / 2) * x0)
 
@@ -166,14 +166,14 @@ def func_num_sln(
             V2.append(v2)
             C1.append(c1)
             H.append(h)
-            error_arr.append(abs(v2 - v) / 15)
+            error_arr.append(((v2 - v) / 15)*16)
             n+=1
             if is_test:
                 u = c * math.exp((-3 / 2) * x)
                 U.append(u)
 
             if error_control:
-                if abs(v2 - v) < (max_error / 32):
+                if abs((v2 - v)/15) < (max_error / 32):
                     h *= 2
                     c2 += 1
             C2.append(c2)
